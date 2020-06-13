@@ -6,7 +6,7 @@ const router = new express.Router()
 
 
 
-router.post('/api/register', async (req, res) => {
+router.post('/api/v1/user/register', async (req, res) => {
     const user = new User(req.body)
     try {
         const existingEmail = await User.findOne({ email: req.body.email })
@@ -21,7 +21,7 @@ router.post('/api/register', async (req, res) => {
     }
 })
 
-router.post('/api/login', passport.authenticate('local', {
+router.post('/api/v1/user/login', passport.authenticate('local', {
     failureRedirect: '/login'
 }), (req, res) => {
     res.send(req.user)
@@ -37,7 +37,7 @@ router.get('/auth/google/callback', passport.authenticate('google'), (req, res) 
     res.redirect('/dashboard')
 })
 
-router.get('/api/logout', async (req, res) => {
+router.get('/api/v1/user/logout', async (req, res) => {
     try {
         req.user.tokens = []
         await req.user.save()
@@ -48,7 +48,7 @@ router.get('/api/logout', async (req, res) => {
     }
 })
 
-router.get('/api/current_user', (req, res) => {
+router.get('/api/v1/user/current_user', (req, res) => {
     try {
         res.send({
             user: req.user,
@@ -57,7 +57,7 @@ router.get('/api/current_user', (req, res) => {
     } catch (e) { res.send() }
 })
 
-router.get('/api/v1/users', async (req, res) => {
+router.get('/api/v1/user/all_user', async (req, res) => {
     try {
         const allUsers = await User.find({})
         res.send(allUsers)
@@ -66,7 +66,7 @@ router.get('/api/v1/users', async (req, res) => {
     }
 })
 
-router.get('/api/v1/:userid', async (req, res) => {
+router.get('/api/v1/user/:userid', async (req, res) => {
     try {
         const singleUser = await User.findById(req.params.userid)
         res.send(singleUser)
@@ -75,7 +75,7 @@ router.get('/api/v1/:userid', async (req, res) => {
     }
 })
 
-router.patch('/api/update/user', async (req, res) => {
+router.patch('/api/v1/user/me', async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['first_name', 'last_name', 'email', 'position', 'college', 'department']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -92,7 +92,7 @@ router.patch('/api/update/user', async (req, res) => {
     }
 })
 
-router.patch('/api/update/:uzer', async (req, res) => {
+router.patch('/api/v1/user/:id', async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['first_name', 'last_name', 'email', 'position', 'college', 'department']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -100,7 +100,7 @@ router.patch('/api/update/:uzer', async (req, res) => {
         return res.status(400).send({ error: 'Invalid updates' })
     }
     try {
-        const user = await User.findById(req.params.uzer)
+        const user = await User.findById(req.params.id)
         updates.forEach((update) => user[update] = req.body[update])
         await user.save()
         res.send(user)
@@ -109,7 +109,7 @@ router.patch('/api/update/:uzer', async (req, res) => {
     }
 })
 
-router.delete('/users/me', auth, async (req, res) => {
+router.delete('/api/v1/user/me', auth, async (req, res) => {
     try {
         // const user = await User.findByIdAndDelete(req.user._id)
         // if(!user){
