@@ -45,7 +45,12 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(cors())
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true
+}
+
+app.use(cors(corsOptions))
 app.use(userRouter)
 app.use(photoRouter)
 app.use(taskRouter)
@@ -53,7 +58,7 @@ app.use(agencyRouter)
 app.use(statusRouter)
 
 
-server.listen(port, ()=>{
+app.listen(port, ()=>{
     console.log('Server is up on port: ' + port)
 })
 

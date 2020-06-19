@@ -34,7 +34,7 @@ router.get('/auth/google', passport.authenticate('google', {
 )
 
 router.get('/auth/google/callback', passport.authenticate('google'), (req, res) => {
-    res.redirect('/dashboard')
+    res.redirect('http://localhost:3000/dashboard')
 })
 
 router.get('/api/v1/user/logout', async (req, res) => {
@@ -54,7 +54,9 @@ router.get('/api/v1/user/current_user', (req, res) => {
             user: req.user,
             token: req.user.tokens[0].token
         })
-    } catch (e) { res.send() }
+    } catch (e) {
+         res.send() 
+    }
 })
 
 router.get('/api/v1/user/all_user', async (req, res) => {

@@ -16,7 +16,7 @@ router.post('/api/v2/agency', async (req,res)=>{
     }
 })
 
-router.get('/api/all/agency', async (req,res)=>{
+router.get('/api/v1/agency/agencies', async (req,res)=>{
     try {
         const agencies = await Agency.find({})
         res.send(agencies)

@@ -44,7 +44,7 @@ router.get('/api/avatar/:id', async (req, res) => {
     }
 })
 
-router.get('/api/me', async (req, res) => {
+router.get('/api/v1/avatar/me', async (req, res) => {
     try {
         const photo = await Photo.findOne({owner: req.user._id})
         res.send({ id: photo._id })
